@@ -50,6 +50,14 @@ uint8_t ledstrip_keys[]={
   0b00011100, 0b00010100, 0b00001111, 0b00001100
 };
 
+void setcolour(uint8_t key,uint8_t r, uint8_t g,uint8_t b){
+  if((nec.irdata & 0x00ff0000)>>16 == ledstrip_keys[key]){
+    dc_red   = r;
+    dc_green = g;
+    dc_blue  = b;
+  }
+}
+
 
 
 //unsigned char led_state = 0;
@@ -72,7 +80,7 @@ static void isr(void) __interrupt 0 { // every 8us = 1/(8e6 / 4 / 16) / TMR0 cou
   }
 
   if ( T0IF ) {
-    TMR0 = 210;
+    TMR0 = 200;
 //    if(period == 255) periods++;
 //    if(period <= dc_green){
 
@@ -113,21 +121,10 @@ void main() {
           //if((nec.irdata & 0x00ff0000)>>16 == 0b00010001) { // polariod rc mirrored command key "1"
           //if((nec.irdata & 0x00ff0000)>>16 == 0b00010010) { // polariod rc mirrored command key "2"
           //if((nec.irdata & 0x00ff0000)>>16 == 0b00010011) { // polariod rc mirrored command key "3"
-          if((nec.irdata & 0x00ff0000)>>16 == ledstrip_keys[4]){
-            dc_red   = 255;
-            dc_green = 0;
-            dc_blue  = 0;
-          }
-          if((nec.irdata & 0x00ff0000)>>16 == ledstrip_keys[5]){
-            dc_red   = 0;
-            dc_green = 255;
-            dc_blue  = 0;
-          }
-          if((nec.irdata & 0x00ff0000)>>16 == ledstrip_keys[6]){
-            dc_red   = 0;
-            dc_green = 0;
-            dc_blue  = 255;
-          }
+          setcolour(4,250,0,0);
+          setcolour(5,0,250,0);
+          setcolour(6,0,0,250);
+          setcolour(7,250,250,250);
         }
       }
       ir_enable();
