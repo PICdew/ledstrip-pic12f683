@@ -10,6 +10,7 @@ todo
   colour sequences
   gamma correction
   ir repeat codes
+  pwm speedup
 */
 
 #include <pic12f683.h>
