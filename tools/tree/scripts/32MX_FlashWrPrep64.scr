@@ -1,0 +1,11 @@
+name          = "32MX_FlashWrPrep64"
+id            = 0
+version       = 0
+unused1       = 0
+script        = {
+ 0xbb, 0xaa, 0x0e, 0xbb, 0xb7, 0xaa, 0xe9, 0xaa,
+ 0x01, 0xbb, 0x3f, 0x00,
+}
+comment       = "SendCmd(ETAP_FASTDATA)
+downloads 64 words (256 bytes) to the PIC32, which is half a row.
+NOTE: does not include PE PROGRAM header.  "

@@ -1,0 +1,11 @@
+name          = "EE11_BusCheck"
+id            = 0
+version       = 0
+unused1       = 0
+script        = {
+ 0xdb, 0xaa, 0xdb, 0xaa, 0xdb, 0xaa, 0xd2, 0xaa,
+ 0x91, 0xbb, 0xbe, 0xaa, 0xa0, 0xbb, 0x01, 0xbb,
+}
+comment       = "executes a WRDI for the purpose of generating a SAK or NoSAK.
+
+Pops 3 \"address\" bytes from buffer"

@@ -1,0 +1,8 @@
+name          = "EE11_Read32"
+id            = 0
+version       = 0
+unused1       = 0
+script        = {
+ 0xbd, 0xaa, 0xa0, 0xbb, 0x03, 0x00, 0x20, 0x00,
+}
+comment       = "Read 32 bytes.  Note cmd & addr bytes to transmit for READ (total 3) expected in DL buffer."

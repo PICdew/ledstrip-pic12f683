@@ -1,0 +1,8 @@
+name          = "DoNothing"
+id            = 0
+version       = 0
+unused1       = 0
+script        = {
+ 0xe3, 0xaa,
+}
+comment       = "No Comment"

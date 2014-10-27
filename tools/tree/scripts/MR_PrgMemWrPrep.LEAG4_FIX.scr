@@ -1,0 +1,9 @@
+name          = "MR_PrgMemWrPrep.LEAG4_FIX"
+id            = 0
+version       = 0
+unused1       = 0
+script        = {
+ 0xee, 0xaa, 0x06, 0xbb, 0x1a, 0xbb, 0xf2, 0xaa,
+ 0xf8, 0xbb, 0xf2, 0xaa, 0x7f, 0xbb,
+}
+comment       = "This script turns on the internal oscillator and BOR in Config Word 1 override options"

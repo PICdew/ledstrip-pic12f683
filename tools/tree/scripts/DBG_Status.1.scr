@@ -1,0 +1,8 @@
+name          = "DBG_Status.1"
+id            = 0
+version       = 0
+unused1       = 0
+script        = {
+ 0xdc, 0xaa,
+}
+comment       = "ICSPCLK state - running/halted."

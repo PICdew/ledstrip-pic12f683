@@ -1,0 +1,12 @@
+name          = "32MX_ChpEraseJT"
+id            = 0
+version       = 0
+unused1       = 0
+script        = {
+ 0xbb, 0xaa, 0x07, 0xbb, 0xba, 0xaa, 0xfc, 0xbb,
+ 0xe8, 0xaa, 0x4a, 0x00,
+}
+comment       = "Uses JTAG erase cmd, not PE
+SendCMD(MTAP_CMD)
+Xferdata(MCHP_ERASE)
+P11 = 400ms"

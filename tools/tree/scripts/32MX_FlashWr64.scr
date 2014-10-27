@@ -1,0 +1,10 @@
+name          = "32MX_FlashWr64"
+id            = 0
+version       = 0
+unused1       = 0
+script        = {
+ 0xb7, 0xaa, 0xe9, 0xaa, 0x01, 0xbb, 0x3f, 0x00,
+ 0xb3, 0xaa,
+}
+comment       = "downloads 64 words (256 bytes) to the PIC32, which is half a row (should be 2nd half) then gets PE response 
+"

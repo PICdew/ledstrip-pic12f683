@@ -1,0 +1,20 @@
+name          = "EE11_Write16"
+id            = 0
+version       = 0
+unused1       = 0
+script        = {
+ 0xbe, 0xaa, 0xa0, 0xbb, 0x01, 0xbb, 0xbe, 0xaa,
+ 0xa0, 0xbb, 0x13, 0x00, 0xe8, 0xaa, 0x01, 0xbb,
+}
+comment       = "Send WREN, then WRITE.  Expect bytes in DL buffer as:
+WREN cmd
+WRITE cmd
+ADDR MSB
+ADDR LSB
+Data 1
+..
+Data 16
+NOTE: UNIO commands include TSS.
+
+TWC = 5ms
+"
