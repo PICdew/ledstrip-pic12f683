@@ -1,23 +1,23 @@
 /*
  * pk2dft.c
- * 
+ *
  * pickit2 device file tool
- * 
+ *
  * features:
  * - dump device files
  * - compile device files
- * 
+ *
  * compile:
  *  gcc pk2dft.c -lconfuse -o pk2dft
- * 
+ *
  * written by amx
- * 
+ *
  * PK2DeviceFile.dat nconsistencies:
  *  - multiple scripts with same name (probably okay, since they are
  *    identified by the number/id)
  *  - size of script comment sometimes exceeds the limit of 128 characters
  *    as specified in (DeviceFile.h)
- * 
+ *
  */
 
 #include <stdio.h>
@@ -26,7 +26,6 @@
 #include <stddef.h>
 #include <stdbool.h>
 #include <string.h>
-#include <malloc.h>
 
 #include <confuse.h>
 
@@ -613,7 +612,7 @@ char *valid_string(char *in, char *out)
 
 char g_tmp[128];
 
-char *script_name(uint16_t script_id)
+char *script_name(int16_t script_id)
 {
 	if (scripts == NULL) return "no scripts loaded";
 	if (((script_id - 1) > hdr.num_scripts) || (script_id < 0)) return "script ID is invalid";
@@ -622,7 +621,7 @@ char *script_name(uint16_t script_id)
 	return valid_string(scripts[script_id-1].name, g_tmp);
 }
 
-char *family_name(uint16_t family_id)
+char *family_name(int16_t family_id)
 {
 	if (families == NULL) return "no families loaded";
 	if (((family_id - 1) > hdr.num_families) || (family_id < 0)) return "family ID is invalid";
