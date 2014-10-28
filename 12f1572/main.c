@@ -8,20 +8,20 @@ static __code uint16_t __at (_CONFIG2) configword2 = _WRT_OFF & _PLLEN_OFF & _PL
 #define FOSC	32000000
 
 void init() {
-  OSCCON = 0b11110000; // int osc: 8MHz x 4 (SPLLEN)
-  PSA    = 1; // No prescaler for timer0
-  T0CS   = 0; // Timer0 clock select: cpu clock
+  OSCCON  = 0b11110000; // int osc: 8MHz x 4 (SPLLEN)
+  PSA     = 1; // no prescaler for timer0
+  TMR0CS  = 0; // Timer0 clock select: cpu clock
 
-  INTCON = 0; // Clear interrupt flag bits
-  GIE    = 0; // Global irq enable
-  T0IE   = 0; // Timer0 irq enable
-  TMR0   = 0; // Clear timer0 register
+  INTCON  = 0; // Clear interrupt flag bits
+  GIE     = 0; // Global irq disable
+  T0IE    = 0; // Timer0 irq disable
+  TMR0    = 0; // Clear timer0 register
 
   // switch off analog
-  ANSELA = 0;
-  ADCON0 = 0;
-  ADCON1 = 0;
-  ADCON2 = 0;
+  ANSELA  = 0;
+  ADCON0  = 0;
+  ADCON1  = 0;
+  ADCON2  = 0;
   CM1CON0 = 0;
   CM1CON1 = 0;
 }
@@ -32,11 +32,12 @@ void main() {
   // set PORTA5 to output
   TRISA5 = 0;
 
+  /* generates symetric 1 MHZ signal */
   while(1) {
     LATA5 = 1;
-    LATA5 = 1;  // two CPU cycles more for the loop goto
-    LATA5 = 1;
-    LATA5 = 1;
+    LATA5 = 1;  // add 3 CPU cycles to generate symetric signal
+    LATA5 = 1;  //
+    LATA5 = 1;  //
     LATA5 = 0;
   }
 }
