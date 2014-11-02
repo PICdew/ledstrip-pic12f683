@@ -31,13 +31,11 @@ void init_pwm() {
   PWM3PHL = 0;          // phase low
   PWM3PHH = 0;          // phase high
   PWM3DCL = 0xff;       // duty cycle low
-  PWM3DCH = 0x40;       // duty cycle high
-                        // freq = FOSC / period = 32^6/65,536 = 488.3 Hz
+  PWM3DCH = 0x7c;       // duty cycle high
+                        // freq = FOSC / period = 32^6/64,00 = 500 Hz
   PWM3PRL = 0xff;       // period low
-  PWM3PRH = 0xff;       // period high
+  PWM3PRH = 0xf9;       // period high
   PWM3CON = 0b11000000; // module enable, output enable, normal polarity, standard mode
-
-  PWMLD   = 0x40; // enable PWM3
 }
 
 void main() {
