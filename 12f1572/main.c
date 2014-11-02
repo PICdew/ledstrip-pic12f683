@@ -9,13 +9,13 @@ static __code uint16_t __at (_CONFIG2) configword2 = _WRT_OFF & _PLLEN_OFF & _PL
 
 void init() {
   OSCCON  = 0b11110000; // int osc: 8MHz x 4 (SPLLEN)
-  PSA     = 1; // no prescaler for timer0
-  TMR0CS  = 0; // Timer0 clock select: cpu clock
+  PSA     = 1;          // no prescaler for timer0
+  TMR0CS  = 0;          // Timer0 clock select: cpu clock
 
-  INTCON  = 0; // Clear interrupt flag bits
-  GIE     = 0; // Global irq disable
-  T0IE    = 0; // Timer0 irq disable
-  TMR0    = 0; // Clear timer0 register
+  INTCON  = 0;          // Clear interrupt flag bits
+  GIE     = 0;          // Global irq disable
+  T0IE    = 0;          // Timer0 irq disable
+  TMR0    = 0;          // Clear timer0 register
 
   // switch off analog
   ANSELA  = 0;
@@ -26,11 +26,28 @@ void init() {
   CM1CON1 = 0;
 }
 
+void init_pwm() {
+  PWM3CLKCON = 0b00000000; // no Prescale - FOSC
+  PWM3PHL = 0;          // phase low
+  PWM3PHH = 0;          // phase high
+  PWM3DCL = 0xff;       // duty cycle low
+  PWM3DCH = 0x40;       // duty cycle high
+                        // freq = FOSC / period = 32^6/65,536 = 488.3 Hz
+  PWM3PRL = 0xff;       // period low
+  PWM3PRH = 0xff;       // period high
+  PWM3CON = 0b11000000; // module enable, output enable, normal polarity, standard mode
+
+  PWMLD   = 0x40; // enable PWM3
+}
+
 void main() {
   init();
 
-  // set PORTA5 to output
+  // set PORTA5 & PORTA2 to output
   TRISA5 = 0;
+  TRISA2 = 0;
+
+  init_pwm();
 
   /* generates symetric 1 MHZ signal */
   while(1) {
