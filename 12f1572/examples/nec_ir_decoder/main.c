@@ -15,7 +15,7 @@ static __code uint16_t __at (_CONFIG2) configword2 = _WRT_OFF & _PLLEN_ON & _STV
 
 volatile uint8_t  result_width_h      = 0;
 volatile uint8_t  result_width_l      = 0;
-volatile uint16_t resultier;
+volatile uint16_t result_width;
 uint8_t           loop;
 volatile uint8_t  state               = 0;
 uint8_t           ir_code_bit         = 255;
@@ -105,16 +105,16 @@ void main() {
     one     2200 -  2300
   */
 
-    resultier = result_width_h << 8 | result_width_l;
-    if(state == 0 && resultier > 13000 && resultier < 14000){ // state = 0 means headerfield
+    result_width = result_width_h << 8 | result_width_l;
+    if(state == 0 && result_width > 13000 && result_width < 14000){ // state = 0 means headerfield
       state = 1; // set state to bitfield
     }
-    if(state == 1 && resultier > 1000 && resultier < 2300){ // state = 1 means bitfield
-      if(resultier < 1200){ // "0" found
+    if(state == 1 && result_width > 1000 && result_width < 2300){ // state = 1 means bitfield
+      if(result_width < 1200){ // "0" found
         ir_code.b32 >>= 1;  // 3h of brain aking - it was ir_code.b32 >> 1 before ;-)
         ir_code_bit++;
       }
-      if(resultier > 2200){ // "1" found
+      if(result_width > 2200){ // "1" found
         ir_code.b32 >>= 1;
         ir_code.b32 |= 0x80000000;
         ir_code_bit++;
