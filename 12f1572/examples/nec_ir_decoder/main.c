@@ -18,7 +18,8 @@ volatile uint8_t  result_width_l      = 0;
 volatile uint16_t result_width;
 uint8_t           loop;
 volatile uint8_t  state               = 0;
-uint8_t           ir_code_bit         = 255;
+volatile uint8_t  ir_code_bit         = 255;
+uint8_t           repeat              = 0;
 
 typedef union {
   struct {
@@ -85,8 +86,8 @@ void isr (void) __interrupt (1){
   }
 
   if(TMR1IF) { // timer1 ovf - illegal timing found
-    state  = 0;
-    ir_code_bit = 255;
+    state  = 0; // wait for trailer
+    ir_code_bit = 255; // reset command register
     TMR1IF = 0; // reset irq flag
   }
   GIE = 1;
@@ -108,6 +109,7 @@ void main() {
     header  6500 -  7000
     zero     500 -   600
     one     1100 -  1150
+    repeat 49000 - 59000
   */
 
     result_width = result_width_h << 8 | result_width_l;
@@ -128,17 +130,26 @@ void main() {
       result_width_l = 0; // "
 
       if(ir_code_bit == 31) { // last bit decoded / state = 2 means trailerfield
-        state = 2;
+        state = 2; // set state to trailerfield
       }
     }
-    if(state == 2 ) { // decoding complete
-      state = 0; // start over
-      ir_code_bit = 255;
-
+    if(state == 2 && result_width > 50000 && result_width < 60000) { // state = 2 means trailerfield
+      // trailerpuls found
+      state = 3; // set state to repeat
+      debug();///////////////////
+    }
+    if(state == 3 && result_width > 49000 && result_width < 59000) { // state = 3 means waiting for repeat
+      // repeat found
+      repeat++;
+    }
+    if(state == 0){ // T1 ovf - no repeats anymore or error
+      repeat = 0;
+    }
+    if(ir_code_bit == 31) { 
       if( (ir_code.addr ^ ir_code.iaddr == 0xFF) && (ir_code.cmd ^ ir_code.icmd == 0xFF) ) { // error correction
         if(ir_code.addr == 0){ // my original led strip remote uses addr=0
           // some application
-          debug();
+//          debug();
         }
       }
     }
