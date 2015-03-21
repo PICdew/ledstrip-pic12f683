@@ -11,7 +11,7 @@ todo
 #include <stdint.h>
 
 static __code uint16_t __at (_CONFIG1) configword1 = _FOSC_INTOSC & _WDTE_OFF & _MCLRE_ON & _CP_OFF & _PWRTE_OFF & _BOREN_OFF & _CLKOUTEN_OFF;
-static __code uint16_t __at (_CONFIG2) configword2 = _WRT_OFF & _PLLEN_ON & _STVREN_ON & _DEBUG_OFF & _LVP_ON;
+static __code uint16_t __at (_CONFIG2) configword2 = _WRT_OFF & _PLLEN_OFF & _STVREN_ON & _DEBUG_OFF & _LVP_ON;
 
 volatile uint8_t  result_width_h      = 0;
 volatile uint8_t  result_width_l      = 0;
@@ -49,15 +49,15 @@ void init() {
   CM1CON0 = 0;
   CM1CON1 = 0;
 
-  IRCF3   = 1;    // CPU 32MHz (rc osc 8MHz * 4 by PLL)
+  IRCF3   = 1;    // CPU 16MHz ( _PLLEN_OFF )
   IRCF2   = 1;    // "
   IRCF1   = 1;    // "
-  IRCF0   = 0;    // "
+  IRCF0   = 1;    // "
 
   TRISA5  = 0;    // output for led / scope - pin2
   TRISA2  = 1;    // input  for ir receiver - pin5
 
-  TMR1CS0 = 0;    // 8MHz (Fosc/4 -> 32MHz/4 ; timer 1 use internal clock)
+  TMR1CS0 = 0;    // 4MHz (Fosc/4 -> 16MHz/4 ; timer 1 use internal clock)
   TMR1CS1 = 0;    // "
 
   T1CKPS0 = 1;    // prescaler 1:8
@@ -99,22 +99,27 @@ void main() {
 
   while(1){
   /*
-    measured timings:
+    measured timings (32MHz CPU):
     header 13000 - 14000
     zero    1000 -  1200
     one     2200 -  2300
+
+    devived timings (16MHz CPU):
+    header  6500 -  7000
+    zero     500 -   600
+    one     1100 -  1150
   */
 
     result_width = result_width_h << 8 | result_width_l;
-    if(state == 0 && result_width > 13000 && result_width < 14000){ // state = 0 means headerfield
+    if(state == 0 && result_width > 6500 && result_width < 7000){ // state = 0 means headerfield
       state = 1; // set state to bitfield
     }
-    if(state == 1 && result_width > 1000 && result_width < 2300){ // state = 1 means bitfield
-      if(result_width < 1200){ // "0" found
+    if(state == 1 && result_width > 500 && result_width < 1150){ // state = 1 means bitfield
+      if(result_width < 600){ // "0" found
         ir_code.b32 >>= 1;  // 3h of brain aking - it was ir_code.b32 >> 1 before ;-)
         ir_code_bit++;
       }
-      if(result_width > 2200){ // "1" found
+      if(result_width > 1100){ // "1" found
         ir_code.b32 >>= 1;
         ir_code.b32 |= 0x80000000;
         ir_code_bit++;
